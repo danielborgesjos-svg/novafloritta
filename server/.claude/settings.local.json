@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/Danie/OneDrive/Desktop/JARVIS-WORKSPACE/nova-floratta//**)",
+      "Read(//mnt/c/Users/Danie/OneDrive/Desktop/JARVIS-WORKSPACE/**)"
+    ]
+  }
+}

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Nova Floratta</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root {
+  --bg: #F9F9F7; --white: #FFFFFF; --black: #0A0A0A; --gold: #C9A96E; 
+  --text: #222222; --border: #E8E2D8; --sidebar: #1A1A1A;
+  --tr: all .3s ease; --rl: 8px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'DM Sans', sans-serif; }
+body { display: flex; height: 100vh; background: var(--bg); color: var(--text); overflow: hidden; }
+.sidebar { width: 260px; background: var(--sidebar); color: #fff; display: flex; flex-direction: column; }
+.sidebar-header { padding: 2rem; border-bottom: 1px solid rgba(255,255,255,.1); text-align: center; }
+.sidebar-header img { width: 120px; margin-bottom: 1rem; filter: brightness(0) invert(1); }
+.nav-links { list-style: none; padding: 2rem 1rem; flex: 1; }
+.nav-item { margin-bottom: .5rem; }
+.nav-link { display: flex; align-items: center; gap: 1rem; padding: 1rem; color: rgba(255,255,255,.6); text-decoration: none; border-radius: 6px; transition: var(--tr); }
+.nav-link:hover, .nav-link.active { background: rgba(201,169,110,.15); color: var(--gold); }
+.content { flex: 1; padding: 2rem; overflow-y: auto; }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+.header h1 { font-size: 1.8rem; }
+.card { background: var(--white); border-radius: var(--rl); padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,.02); border: 1px solid var(--border); }
+.table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+.table th, .table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+.table th { font-weight: 600; color: #666; font-size: .85rem; text-transform: uppercase; }
+.btn { display: inline-flex; align-items: center; gap: .5rem; padding: .6rem 1.2rem; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; transition: var(--tr); }
+.btn-gold { background: var(--gold); color: var(--black); }
+.btn-gold:hover { background: #b09159; }
+.btn-black { background: var(--black); color: var(--gold); }
+.btn-black:hover { background: #333; }
+.btn-outline { background: transparent; border: 1px solid var(--border); }
+.btn-danger { background: #fee2e2; color: #dc2626; }
+.badge { padding: .3rem .6rem; border-radius: 50px; font-size: .75rem; font-weight: 700; }
+.badge-Pendente { background: #fef3c7; color: #92400e; }
+.badge-Em { background: #e0e7ff; color: #3730a3; }
+.badge-Entregue { background: #dcfce7; color: #166534; }
+
+/* MODAL */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: none; align-items: center; justify-content: center; z-index: 100; }
+.modal-overlay.active { display: flex; }
+.modal-content { background: #fff; width: 500px; padding: 2rem; border-radius: var(--rl); position: relative; max-height: 90vh; overflow-y: auto; }
+.modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; cursor: pointer; }
+.form-group { margin-bottom: 1.2rem; }
+.form-group label { display: block; margin-bottom: .5rem; font-weight: 600; font-size: .9rem; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: .8rem; border: 1px solid var(--border); border-radius: 6px; }
+.form-group input[type="file"] { padding: .5rem; }
+.section { display: none; }
+.section.active { display: block; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <h2>Nova Floratta</h2>
+    <p style="font-size:.8rem;color:var(--gold);margin-top:.5rem">Admin Panel</p>
+  </div>
+  <ul class="nav-links">
+    <li class="nav-item"><a href="#" class="nav-link active" onclick="switchTab('pedidos', this)"><i data-lucide="shopping-cart"></i> Pedidos</a></li>
+    <li class="nav-item"><a href="#" class="nav-link" onclick="switchTab('produtos', this)"><i data-lucide="package"></i> Produtos</a></li>
+    <li class="nav-item"><a href="#" class="nav-link" onclick="switchTab('cupons', this)"><i data-lucide="ticket"></i> Cupons</a></li>
+    <li class="nav-item" style="margin-top:2rem"><a href="/" class="nav-link"><i data-lucide="external-link"></i> Ver Loja</a></li>
+  </ul>
+</aside>
+
+<main class="content">
+  
+  <!-- PEDIDOS -->
+  <div id="sec-pedidos" class="section active">
+    <div class="header">
+      <h1>Gerenciar Pedidos</h1>
+      <button class="btn btn-outline" onclick="loadOrders()"><i data-lucide="refresh-cw"></i> Atualizar</button>
+    </div>
+    <div class="card">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Itens</th>
+            <th>Total</th>
+            <th>Entrega / Local</th>
+            <th>Pagamento</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="orders-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PRODUTOS -->
+  <div id="sec-produtos" class="section">
+    <div class="header">
+      <h1>Catálogo de Produtos</h1>
+      <button class="btn btn-gold" onclick="openProductModal()"><i data-lucide="plus"></i> Novo Produto</button>
+    </div>
+    <div class="card">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Img</th>
+            <th>Nome</th>
+            <th>Preço</th>
+            <th>Estoque</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="products-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CUPONS -->
+  <div id="sec-cupons" class="section">
+    <div class="header">
+      <h1>Cupons de Desconto</h1>
+      <button class="btn btn-gold" onclick="document.getElementById('coupon-modal').classList.add('active')"><i data-lucide="plus"></i> Novo Cupom</button>
+    </div>
+    <div class="card">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Desconto (%)</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="coupons-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="product-modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="document.getElementById('product-modal').classList.remove('active')"><i data-lucide="x"></i></button>
+    <h2 id="product-modal-title" style="margin-bottom:1.5rem">Novo Produto</h2>
+    <form id="product-form" onsubmit="saveProduct(event)">
+      <input type="hidden" id="prod-id">
+      <div class="form-group">
+        <label>Nome do Produto</label>
+        <input type="text" id="prod-name" required>
+      </div>
+      <div style="display:flex;gap:1rem">
+        <div class="form-group" style="flex:1">
+          <label>Preço (R$)</label>
+          <input type="number" step="0.01" id="prod-price" required>
+        </div>
+        <div class="form-group" style="flex:1">
+          <label>Estoque</label>
+          <input type="number" id="prod-stock" required value="10">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Categoria</label>
+        <select id="prod-category">
+          <option value="1">Rosas</option>
+          <option value="2">Buquês</option>
+          <option value="3">Arranjos</option>
+          <option value="4">Girassóis</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Descrição</label>
+        <textarea id="prod-desc" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Imagem (Upload do Disco Local)</label>
+        <input type="file" id="prod-image" accept="image/*">
+        <p style="font-size:0.8rem;color:#888;margin-top:0.3rem">Deixe em branco se não quiser alterar a imagem ao editar.</p>
+      </div>
+      <div class="form-group" style="display:flex;align-items:center;gap:0.5rem">
+        <input type="checkbox" id="prod-new" style="width:auto"> <label style="margin:0">É Lançamento / Novo?</label>
+      </div>
+      <button type="submit" class="btn btn-black" style="width:100%">Salvar Produto</button>
+    </form>
+  </div>
+</div>
+
+<!-- COUPON MODAL -->
+<div class="modal-overlay" id="coupon-modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="document.getElementById('coupon-modal').classList.remove('active')"><i data-lucide="x"></i></button>
+    <h2 style="margin-bottom:1.5rem">Novo Cupom</h2>
+    <form onsubmit="saveCoupon(event)">
+      <div class="form-group">
+        <label>Código do Cupom</label>
+        <input type="text" id="cup-code" placeholder="Ex: FLORATTA10" required style="text-transform:uppercase">
+      </div>
+      <div class="form-group">
+        <label>Desconto (%)</label>
+        <input type="number" id="cup-discount" placeholder="Ex: 10" required min="1" max="100">
+      </div>
+      <button type="submit" class="btn btn-black" style="width:100%">Salvar Cupom</button>
+    </form>
+  </div>
+</div>
+
+<script>
+lucide.createIcons();
+const API = '/api';
+
+function switchTab(tab, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+  document.getElementById(`sec-${tab}`).classList.add('active');
+  el.classList.add('active');
+  if(tab === 'pedidos') loadOrders();
+  if(tab === 'produtos') loadProducts();
+  if(tab === 'cupons') loadCoupons();
+}
+
+// -- PEDIDOS --
+async function loadOrders() {
+  const res = await fetch(`${API}/orders`);
+  const orders = await res.json();
+  const tb = document.getElementById('orders-tbody');
+  tb.innerHTML = orders.map(o => `
+    <tr>
+      <td>#${o.id}</td>
+      <td><strong>${o.customer_name}</strong><br><small>${o.customer_phone}</small></td>
+      <td style="max-width:200px;font-size:0.85rem">${o.items_summary}<br><small style="color:#C9A96E">Obs: ${o.observation || 'Nenhuma'}</small></td>
+      <td>R$ ${o.total.toFixed(2)}</td>
+      <td>${o.delivery_type === 'entrega' ? `Entrega<br><small>${o.address}</small>` : 'Retirada'}</td>
+      <td>${o.payment_method.toUpperCase()}</td>
+      <td>
+        <select onchange="changeOrderStatus(${o.id}, this.value)" style="padding:0.3rem;border-radius:4px;border:1px solid #ddd">
+          <option value="Pendente" ${o.status==='Pendente'?'selected':''}>Pendente</option>
+          <option value="Em Produção" ${o.status==='Em Produção'?'selected':''}>Em Produção</option>
+          <option value="Saiu para Entrega" ${o.status==='Saiu para Entrega'?'selected':''}>Saiu para Entrega</option>
+          <option value="Entregue" ${o.status==='Entregue'?'selected':''}>Entregue</option>
+          <option value="Cancelado" ${o.status==='Cancelado'?'selected':''}>Cancelado</option>
+        </select>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function changeOrderStatus(id, status) {
+  await fetch(`${API}/orders/${id}/status`, {
+    method: 'PUT', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({status})
+  });
+  alert('Status atualizado!');
+}
+
+// -- PRODUTOS --
+let products = [];
+async function loadProducts() {
+  const res = await fetch(`${API}/products`);
+  products = await res.json();
+  const tb = document.getElementById('products-tbody');
+  tb.innerHTML = products.map(p => `
+    <tr>
+      <td>${p.image ? `<img src="${p.image}" width="40" height="40" style="object-fit:cover;border-radius:4px">` : ''}</td>
+      <td>${p.name}</td>
+      <td>R$ ${p.price.toFixed(2)}</td>
+      <td>${p.stock}</td>
+      <td>
+        <button class="btn btn-outline" style="padding:0.4rem" onclick="editProduct(${p.id})"><i data-lucide="edit" size="14"></i></button>
+        <button class="btn btn-danger" style="padding:0.4rem" onclick="deleteProduct(${p.id})"><i data-lucide="trash" size="14"></i></button>
+      </td>
+    </tr>
+  `).join('');
+  lucide.createIcons();
+}
+
+function openProductModal() {
+  document.getElementById('product-form').reset();
+  document.getElementById('prod-id').value = '';
+  document.getElementById('product-modal-title').innerText = 'Novo Produto';
+  document.getElementById('product-modal').classList.add('active');
+}
+
+function editProduct(id) {
+  const p = products.find(x => x.id === id);
+  if(!p) return;
+  document.getElementById('product-form').reset();
+  document.getElementById('prod-id').value = p.id;
+  document.getElementById('prod-name').value = p.name;
+  document.getElementById('prod-price').value = p.price;
+  document.getElementById('prod-stock').value = p.stock;
+  document.getElementById('prod-category').value = p.category_id || 1;
+  document.getElementById('prod-desc').value = p.description || '';
+  document.getElementById('prod-new').checked = p.is_new === 1;
+  document.getElementById('product-modal-title').innerText = 'Editar Produto';
+  document.getElementById('product-modal').classList.add('active');
+}
+
+async function saveProduct(e) {
+  e.preventDefault();
+  const id = document.getElementById('prod-id').value;
+  const formData = new FormData();
+  formData.append('name', document.getElementById('prod-name').value);
+  formData.append('price', document.getElementById('prod-price').value);
+  formData.append('stock', document.getElementById('prod-stock').value);
+  formData.append('category_id', document.getElementById('prod-category').value);
+  formData.append('description', document.getElementById('prod-desc').value);
+  formData.append('is_new', document.getElementById('prod-new').checked);
+
+  const fileInput = document.getElementById('prod-image');
+  if(fileInput.files.length > 0) {
+    formData.append('image', fileInput.files[0]);
+  }
+
+  const url = id ? `${API}/products/${id}` : `${API}/products`;
+  const method = id ? 'PUT' : 'POST';
+
+  const res = await fetch(url, { method, body: formData });
+  if(res.ok) {
+    document.getElementById('product-modal').classList.remove('active');
+    loadProducts();
+  } else {
+    alert("Erro ao salvar produto");
+  }
+}
+
+async function deleteProduct(id) {
+  if(!confirm('Tem certeza?')) return;
+  await fetch(`${API}/products/${id}`, { method: 'DELETE' });
+  loadProducts();
+}
+
+// -- CUPONS --
+async function loadCoupons() {
+  const res = await fetch(`${API}/coupons`);
+  const coupons = await res.json();
+  const tb = document.getElementById('coupons-tbody');
+  tb.innerHTML = coupons.map(c => `
+    <tr>
+      <td><strong style="letter-spacing:1px">${c.code}</strong></td>
+      <td>${c.discount_percentage}%</td>
+      <td>${c.is_active ? '<span class="badge badge-Entregue">Ativo</span>' : '<span class="badge badge-Pendente">Inativo</span>'}</td>
+      <td>
+        <button class="btn btn-danger" style="padding:0.4rem" onclick="deleteCoupon(${c.id})"><i data-lucide="trash" size="14"></i></button>
+      </td>
+    </tr>
+  `).join('');
+  lucide.createIcons();
+}
+
+async function saveCoupon(e) {
+  e.preventDefault();
+  const code = document.getElementById('cup-code').value.toUpperCase();
+  const discount = document.getElementById('cup-discount').value;
+  
+  await fetch(`${API}/coupons`, {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ code, discount_percentage: discount })
+  });
+  
+  document.getElementById('coupon-modal').classList.remove('active');
+  loadCoupons();
+}
+
+async function deleteCoupon(id) {
+  if(!confirm('Deletar cupom?')) return;
+  await fetch(`${API}/coupons/${id}`, { method: 'DELETE' });
+  loadCoupons();
+}
+
+// Inicializar
+loadOrders();
+</script>
+</body>
+</html>

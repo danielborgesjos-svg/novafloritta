@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova Floratta — Flores que contam histórias</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- Icons (Lucide) -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root{
+  --black:#0A0A0A; --black2:#1A1A1A; --gold:#C9A96E; --gold-dark:#9A7535; --gold-light:#FAF1E4;
+  --bg:#F9F9F7; --white:#FFFFFF; --text:#222222; --text-light:#666666; --border:#E8E2D8; 
+  --whatsapp:#25D366; --red:#B83232; 
+  --shadow:0 4px 15px rgba(0,0,0,.04); --shadow-hover:0 12px 30px rgba(0,0,0,.08);
+  --rl:12px; --tr:all .3s ease; --fd:'Playfair Display',serif; --fu:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--fu);line-height:1.6;overflow-x:hidden}
+.container{max-width:1200px;margin:0 auto;padding:0 1.5rem}
+
+/* ── TOPBAR ── */
+.topbar{background:linear-gradient(90deg,var(--gold-dark),var(--gold),var(--gold-dark));background-size:200% 100%;color:var(--black);text-align:center;padding:.55rem 1rem;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;animation:shimmer 3s linear infinite}
+@keyframes shimmer{0%{background-position:0% 0}100%{background-position:200% 0}}
+
+/* ── HEADER BLACK & GOLD ── */
+.hdr{background:var(--black);position:fixed;top:0;left:0;width:100%;z-index:900;box-shadow:0 4px 30px rgba(0,0,0,0.4)}
+.hdr-inner{padding:1.4rem 0;border-bottom:1px solid rgba(201,169,110,.15)}
+.hdr-flex{display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;text-decoration:none}
+.logo img{height:180px;display:block;transition:var(--tr);filter:drop-shadow(0 4px 15px rgba(201,169,110,.25))}
+.logo:hover img{filter:drop-shadow(0 6px 20px rgba(201,169,110,.45));transform:scale(1.02)}
+.hdr-right{display:flex;gap:2rem;align-items:center}
+.hdr-nav{display:flex;gap:2rem;align-items:center}
+.hdr-nav a{color:rgba(255,255,255,.6);font-size:.85rem;font-weight:500;letter-spacing:.06em;text-decoration:none;transition:var(--tr);padding:.3rem 0;border-bottom:1px solid transparent}
+.hdr-nav a:hover{color:var(--gold);border-bottom-color:var(--gold)}
+.hdr-icon-btn{background:none;border:1px solid rgba(201,169,110,.2);border-radius:6px;cursor:pointer;color:var(--gold);position:relative;display:flex;align-items:center;gap:.5rem;padding:.6rem 1rem;transition:var(--tr)}
+.hdr-icon-btn:hover{background:rgba(201,169,110,.1);border-color:var(--gold)}
+.hdr-icon-btn span.label{font-size:.8rem;font-weight:600;color:var(--gold)}
+.badge{position:absolute;top:-6px;right:-8px;background:var(--gold);color:var(--black);font-size:10px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+
+/* ── INSTAGRAM SECTION ── */
+.insta-section{background:var(--black);padding:5rem 2rem;margin:4rem 0 0}
+.insta-section .sec-hdr h2{color:var(--white)}
+.insta-section .sec-hdr p{color:var(--gold)}
+.insta-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
+.insta-item{aspect-ratio:1/1;overflow:hidden;position:relative;background:#111;cursor:pointer}
+.insta-item img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;filter:brightness(.9)}
+.insta-item:hover img{transform:scale(1.08);filter:brightness(1)}
+.insta-overlay{position:absolute;inset:0;background:rgba(201,169,110,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;opacity:0;transition:var(--tr);color:#fff}
+.insta-item:hover .insta-overlay{opacity:1}
+.insta-handle{text-align:center;margin-top:2rem;font-size:1rem;color:rgba(255,255,255,.5);letter-spacing:.05em}
+.insta-handle a{color:var(--gold);text-decoration:none;font-weight:600}
+@media(max-width:768px){.insta-grid{grid-template-columns:repeat(3,1fr)}.hdr-nav{display:none}.logo img{height:100px}}
+
+/* ── HERO SPLIT ── */
+.hero{display:grid;grid-template-columns:1fr 1fr;min-height:580px;border-radius:var(--rl);overflow:hidden;margin:1.5rem 0 4rem;box-shadow:0 20px 60px rgba(0,0,0,.12)}
+.hero-left{background:var(--black);padding:4rem 3.5rem;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.hero-left::before{content:'';position:absolute;top:-80px;left:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(201,169,110,.12),transparent 70%);pointer-events:none}
+.hero-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;display:flex;align-items:center;gap:.6rem}
+.hero-eyebrow::before{content:'';width:24px;height:1.5px;background:var(--gold)}
+.hero-title{font-family:var(--fd);font-size:clamp(2.2rem,4vw,3.5rem);line-height:1.1;color:#fff;font-weight:600;margin-bottom:1.2rem}
+.hero-title em{color:var(--gold);font-style:italic;display:block}
+.hero-subtitle{font-size:.95rem;color:rgba(255,255,255,.55);line-height:1.75;margin-bottom:2.5rem;max-width:380px}
+.hero-btns{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:3rem}
+.hero-trust{display:flex;gap:2rem;border-top:1px solid rgba(255,255,255,.08);padding-top:2rem}
+.ht-item{display:flex;flex-direction:column;gap:.2rem}
+.ht-val{font-family:var(--fd);font-size:1.5rem;color:#fff;font-weight:600}
+.ht-lbl{font-size:.7rem;color:rgba(255,255,255,.4);letter-spacing:.08em;text-transform:uppercase}
+.hero-right{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:3px;background:var(--black)}
+.hero-tile{overflow:hidden;position:relative;background:#111}
+.hero-tile img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease;display:block}
+.hero-tile:hover img{transform:scale(1.06)}
+.hero-tile:first-child{grid-row:span 2}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.hero-right{display:none}.hero-left{padding:3rem 2rem}}
+
+/* ── SEC TITLES ── */
+.sec-hdr{text-align:center;margin-bottom:3.5rem}
+.sec-hdr h2{font-family:var(--fd);font-size:2.5rem;color:var(--black);margin-bottom:.5rem}
+.sec-hdr p{color:var(--gold-dark);text-transform:uppercase;letter-spacing:3px;font-size:.75rem;font-weight:600}
+
+/* ── PRODUCT GRID ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:2rem}
+.pc{background:var(--white);border-radius:var(--rl);overflow:hidden;transition:var(--tr);border:1px solid var(--border);cursor:pointer;display:flex;flex-direction:column}
+.pc:hover{transform:translateY(-5px);box-shadow:var(--shadow-hover);border-color:var(--gold)}
+.pc-img-wrap{aspect-ratio:1/1;background:#f5f5f5;overflow:hidden;position:relative}
+.pc-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.pc:hover .pc-img-wrap img{transform:scale(1.05)}
+.pc-info{padding:1.2rem 1.5rem 1.5rem;text-align:left;flex-grow:1;display:flex;flex-direction:column}
+.pc-name{font-family:var(--fd);font-size:1.1rem;margin-bottom:.3rem;color:var(--black);line-height:1.3}
+.pc-price{font-weight:700;color:var(--gold-dark);font-size:1.25rem;margin-bottom:.2rem}
+.pc-stock-info{font-size:.72rem;color:var(--text-light);margin-bottom:1rem}
+.pc-qty{display:flex;align-items:center;gap:.5rem;margin-bottom:.9rem}
+.pc-qty button{width:28px;height:28px;border:1px solid var(--border);background:#fff;border-radius:4px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:var(--tr)}
+.pc-qty button:hover{background:var(--gold);color:#fff;border-color:var(--gold)}
+.pc-qty span{min-width:28px;text-align:center;font-weight:600;font-size:.95rem}
+.pc-btns{display:flex;flex-direction:column;gap:.5rem;margin-top:auto}
+.pc-btns .btn{width:100%;justify-content:center;padding:.72rem;font-size:.82rem;border-radius:6px;font-weight:600}
+.pc-img-wrap{aspect-ratio:1/1;background:#f5f5f5;overflow:hidden;position:relative}
+.pc-badge{position:absolute;top:.8rem;left:.8rem;font-size:.65rem;font-weight:700;padding:.25rem .6rem;border-radius:3px;text-transform:uppercase;letter-spacing:.06em}
+.badge-new{background:var(--gold);color:var(--black)}
+.badge-low{background:#fef3c7;color:#92400e;border:1px solid #fde68a}
+/* FILTROS */
+.filter-bar{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:2rem;padding:1rem 1.5rem;background:#fff;border-radius:var(--rl);border:1px solid var(--border)}
+.cat-pills{display:flex;gap:.5rem;flex-wrap:wrap}
+.cat-pill{border:1px solid var(--border);background:transparent;padding:.45rem 1rem;border-radius:50px;font-size:.8rem;font-weight:600;cursor:pointer;transition:var(--tr);color:var(--text-light);white-space:nowrap}
+.cat-pill:hover,.cat-pill.active{background:var(--black);color:var(--gold);border-color:var(--black)}
+.sort-select{border:1px solid var(--border);padding:.5rem .9rem;border-radius:6px;font-family:var(--fu);font-size:.82rem;color:var(--text);background:#fff;cursor:pointer;outline:none}
+.results-count{font-size:.82rem;color:var(--text-light);white-space:nowrap}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.9rem 1.8rem;border-radius:6px;font-weight:600;cursor:pointer;transition:var(--tr);border:none;font-family:var(--fu);text-decoration:none;font-size:.9rem}
+.btn-gold{background:var(--gold);color:var(--black)}
+.btn-gold:hover{background:var(--gold-dark);color:#fff}
+.btn-black{background:var(--black);color:var(--gold)}
+.btn-black:hover{background:#333}
+.btn-wa{background:var(--whatsapp);color:#fff}
+.btn-wa:hover{background:#1ebc57}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+
+/* ── MODALS ── */
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,10,10,0.8);backdrop-filter:blur(5px);z-index:3000;display:none;align-items:center;justify-content:center;padding:1rem;opacity:0;transition:opacity .3s ease}
+.modal-overlay.active{display:flex;opacity:1}
+.modal-card{background:var(--white);border-radius:var(--rl);width:100%;max-width:900px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 20px 50px rgba(0,0,0,0.3)}
+.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;cursor:pointer;color:var(--text-light);z-index:10;padding:.5rem}
+
+/* ── PRODUCT DETAILS ── */
+.pd-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.pd-img{aspect-ratio:4/5;background:#f5f5f5}
+.pd-img img{width:100%;height:100%;object-fit:cover}
+.pd-info{padding:3rem 2.5rem;display:flex;flex-direction:column;justify-content:center}
+.pd-cat{color:var(--gold-dark);text-transform:uppercase;font-size:.7rem;letter-spacing:2px;font-weight:700;margin-bottom:1rem}
+.pd-name{font-family:var(--fd);font-size:2.2rem;line-height:1.1;color:var(--black);margin-bottom:1rem}
+.pd-price{font-size:1.8rem;color:var(--gold-dark);font-weight:600;margin-bottom:1.5rem}
+.pd-desc{color:var(--text-light);margin-bottom:2.5rem;font-size:.95rem;line-height:1.7}
+
+/* ── CHECKOUT FLOW ── */
+.chk-card{max-width:500px;padding:3rem 2.5rem}
+.chk-step-title{font-family:var(--fd);font-size:1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:.5rem}
+.chk-step-title span{background:var(--gold);color:var(--black);width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:.8rem;font-weight:700}
+.form-group{margin-bottom:1.2rem}
+.form-group label{display:block;font-size:.8rem;font-weight:600;margin-bottom:.5rem;color:var(--text-light)}
+.form-group input, .form-group select{width:100%;padding:1rem;border:1px solid var(--border);border-radius:6px;font-family:var(--fu);font-size:.95rem;background:var(--bg)}
+.form-group input:focus{outline:none;border-color:var(--gold)}
+.radio-group{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.radio-card{border:1px solid var(--border);padding:1rem;border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:.8rem;transition:var(--tr)}
+.radio-card input{display:none}
+.radio-card.active{border-color:var(--gold);background:var(--gold-light)}
+
+/* ── WA FLOAT ── */
+.wa-float{position:fixed;bottom:2rem;right:2rem;background:var(--whatsapp);color:#fff;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 25px rgba(37,211,102,0.3);z-index:999;transition:var(--tr)}
+.wa-float:hover{transform:scale(1.1)}
+
+@media (max-width: 768px) {
+  .pd-grid{grid-template-columns:1fr}
+  .pd-img{aspect-ratio:1/1}
+  .chk-card{padding:2rem 1.5rem}
+}
+.hdr{transition:transform .4s cubic-bezier(.4,0,.2,1), box-shadow .3s ease}
+.hdr.hide{transform:translateY(-100%)}
+.footer{background:var(--black);color:rgba(255,255,255,.55);padding:4rem 0 2rem;border-top:1px solid rgba(201,169,110,.15)}
+.footer-grid{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+.footer-brand img{height:70px;margin-bottom:1.2rem;filter:brightness(0) invert(1) opacity(.9)}
+.footer-brand p{font-size:.85rem;line-height:1.7;max-width:260px}
+.footer-col h4{font-size:.7rem;text-transform:uppercase;letter-spacing:.18em;color:var(--gold);margin-bottom:1.2rem;font-weight:700}
+.footer-col ul{list-style:none}
+.footer-col ul li{margin-bottom:.6rem}
+.footer-col ul li a{color:rgba(255,255,255,.55);text-decoration:none;font-size:.85rem;transition:var(--tr)}
+.footer-col ul li a:hover{color:var(--gold)}
+.footer-col .ci{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.9rem;font-size:.85rem}
+.footer-col .ci svg{color:var(--gold);flex-shrink:0;margin-top:2px}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.06);padding-top:1.8rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-bottom p{font-size:.8rem}
+.footer-pay{display:flex;gap:.5rem;flex-wrap:wrap}
+.pay-tag{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:.3rem .7rem;border-radius:4px;font-size:.7rem;color:rgba(255,255,255,.45);font-weight:600}
+.footer-socials{display:flex;gap:.8rem;margin-top:1.2rem}
+.footer-socials a{width:36px;height:36px;border:1px solid rgba(201,169,110,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);transition:var(--tr);text-decoration:none}
+.footer-socials a:hover{background:var(--gold);color:var(--black)}
+@media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.footer-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- WA FLOAT -->
+<a href="https://wa.me/5541991073383" class="wa-float" target="_blank"><i data-lucide="message-circle" size="32"></i></a>
+
+<div id="notif" style="position:fixed;top:5rem;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--black);padding:1rem 2.5rem;border-radius:50px;z-index:4000;display:none;font-weight:600;box-shadow:0 4px 15px rgba(0,0,0,0.1)"></div>
+
+<!-- TOPBAR -->
+<div class="topbar">🌸 Frete Grátis em Todo o Brasil &nbsp;·&nbsp; Entrega em até 1 Hora &nbsp;·&nbsp; Cupom: FLORATTA10</div>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-inner">
+    <div class="container">
+      <div class="hdr-flex">
+        <a href="#" class="logo" id="logo-trigger">
+          <img src="https://i.imgur.com/Axaizmw.png" alt="Nova Floratta">
+        </a>
+        <nav class="hdr-nav">
+          <a href="#catalog">Catálogo</a>
+          <a href="#sobre">Sobre</a>
+          <a href="https://wa.me/5541991073383" target="_blank">Contato</a>
+        </nav>
+        <div class="hdr-right">
+          <button class="hdr-icon-btn" onclick="document.getElementById('auth-modal').classList.add('active')" title="Painel Admin">
+            <i data-lucide="shield" size="18"></i>
+            <span class="label">Admin</span>
+          </button>
+          <a href="https://wa.me/5541991073383" target="_blank" class="hdr-icon-btn">
+            <i data-lucide="message-circle" size="18"></i>
+            <span class="label">WhatsApp</span>
+          </a>
+          <button class="hdr-icon-btn" onclick="toggleCart()">
+            <i data-lucide="shopping-bag" size="18"></i>
+            <span class="label">Carrinho</span>
+            <span id="cart-count" class="badge">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- SHOP VIEW -->
+<main id="view-shop" style="display:block; padding-top:220px">
+  <div class="container">
+    <section class="hero">
+      <!-- ESQUERDA -->
+      <div class="hero-left">
+        <div class="hero-eyebrow">Boutique Premium</div>
+        <h1 class="hero-title">Flores que
+          <em>emocionam</em>
+        </h1>
+        <p class="hero-subtitle">Arranjos exclusivos criados com flores frescas, entregues com cuidado em até 1 hora. Cada pétala escolhida com amor.</p>
+        <div class="hero-btns">
+          <button class="btn btn-gold" onclick="document.getElementById('catalog').scrollIntoView({behavior:'smooth'})">
+            <i data-lucide="sparkles" size="16"></i> Ver Catálogo
+          </button>
+          <a href="https://wa.me/5541991073383" target="_blank" class="btn" style="background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.15)">
+            <i data-lucide="message-circle" size="16"></i> Falar com a loja
+          </a>
+        </div>
+        <div class="hero-trust">
+          <div class="ht-item"><span class="ht-val">+5k</span><span class="ht-lbl">Clientes Felizes</span></div>
+          <div class="ht-item"><span class="ht-val">1h</span><span class="ht-lbl">Entrega Express</span></div>
+          <div class="ht-item"><span class="ht-val">4.9</span><span class="ht-lbl">Avaliação Média</span></div>
+        </div>
+      </div>
+      <!-- DIREITA: Hero Logo grande -->
+      <div class="hero-right" id="hero-mosaic" style="display:flex;align-items:center;justify-content:center;background:var(--black);padding:2rem;">
+        <img src="https://i.imgur.com/MU2b9eP.jpeg" alt="Nova Floratta Logo" style="max-width:80%;height:auto;filter:drop-shadow(0 10px 30px rgba(0,0,0,0.1));">
+      </div>
+    </section>
+
+    <section id="catalog" style="padding-bottom:6rem">
+      <div class="sec-hdr">
+        <p>Catálogo Oficial</p>
+        <h2>Nossas Flores</h2>
+      </div>
+      <!-- BARRA DE FILTROS -->
+      <div class="filter-bar">
+        <div class="cat-pills" id="cat-pills">
+          <button class="cat-pill active" onclick="filterCat('all', this)">Todas</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem">
+          <span class="results-count" id="results-count"></span>
+          <select class="sort-select" id="sort-select" onchange="renderGrid()">
+            <option value="default">Ordenar por</option>
+            <option value="asc">Menor preço</option>
+            <option value="desc">Maior preço</option>
+            <option value="name">Nome A-Z</option>
+          </select>
+        </div>
+      </div>
+      <div id="product-grid" class="grid">
+        <!-- Dinâmico -->
+      </div>
+    </section>
+  </div>
+
+  <!-- INSTAGRAM SECTION -->
+  <section class="insta-section">
+    <div class="sec-hdr">
+      <p>@novafloratta</p>
+      <h2>Siga no Instagram</h2>
+    </div>
+    <div class="container">
+      <div class="insta-grid" id="insta-grid">
+        <!-- Preenchido via JS com as fotos do catálogo -->
+      </div>
+      <p class="insta-handle">Veja mais em <a href="https://instagram.com/novafloratta" target="_blank">@novafloratta</a></p>
+    </div>
+  </section>
+</main>
+
+<!-- PRODUCT DETAILS MODAL -->
+<div id="product-modal" class="modal-overlay">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal('product-modal')"><i data-lucide="x"></i></button>
+    <div class="pd-grid" id="pd-content">
+      <!-- Preenchido via JS -->
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT FLOW MODAL -->
+<div id="checkout-modal" class="modal-overlay">
+  <div class="modal-card chk-card">
+    <button class="modal-close" onclick="closeModal('checkout-modal')"><i data-lucide="x"></i></button>
+    
+    <!-- STEP 1: IDENTIFICAÇÃO -->
+    <div id="chk-step-1">
+      <h3 class="chk-step-title"><span>1</span> Identificação</h3>
+      <div class="form-group">
+        <label>Nome Completo</label>
+        <input type="text" id="chk-name" placeholder="Ex: Maria Clara">
+      </div>
+      <div class="form-group">
+        <label>Telefone / WhatsApp</label>
+        <input type="text" id="chk-phone" placeholder="(  ) 99999-9999">
+      </div>
+      <div class="form-group">
+        <label>Observação (Opcional - Ex: Nome para cartão)</label>
+        <textarea id="chk-obs" rows="2" style="width:100%;padding:1rem;border:1px solid var(--border);border-radius:6px;font-family:var(--fu);font-size:.95rem;background:var(--bg)"></textarea>
+      </div>
+      <button class="btn btn-black" style="width:100%;margin-top:1rem" onclick="goToStep(2)">Continuar</button>
+    </div>
+
+    <!-- STEP 2: ENTREGA -->
+    <div id="chk-step-2" style="display:none">
+      <h3 class="chk-step-title"><span>2</span> Opções de Entrega</h3>
+      <div class="radio-group" style="margin-bottom:1.5rem">
+        <label class="radio-card active" onclick="setDelivery('retirada', this)">
+          <i data-lucide="store" size="20"></i>
+          <div><strong style="display:block;font-size:.9rem">Retirar na Loja</strong><small style="color:var(--text-light)">Grátis</small></div>
+        </label>
+        <label class="radio-card" onclick="setDelivery('entrega', this)">
+          <i data-lucide="truck" size="20"></i>
+          <div><strong style="display:block;font-size:.9rem">Delivery</strong><small style="color:var(--text-light)">Em até 1 hora</small></div>
+        </label>
+      </div>
+      <div class="form-group" id="address-field" style="display:none">
+        <label>Região de Entrega</label>
+        <select id="chk-region" onchange="calculateDelivery()" style="margin-bottom:1rem">
+          <option value="">Selecione uma região...</option>
+          <option value="Curitiba" data-cost="25.00">Curitiba (~10km)</option>
+          <option value="Piraquara" data-cost="45.00">Piraquara (~18km)</option>
+          <option value="Pinhais" data-cost="15.00">Pinhais (~6km)</option>
+          <option value="Colombo" data-cost="30.00">Colombo (~12km)</option>
+          <option value="Quatro Barras" data-cost="40.00">Quatro Barras (~16km)</option>
+          <option value="São José dos Pinhais" data-cost="55.00">São José dos Pinhais (~22km)</option>
+        </select>
+        <label>Endereço Completo</label>
+        <input type="text" id="chk-address" placeholder="Rua, Número, Bairro...">
+        <p style="margin-top:0.5rem;font-size:0.85rem;color:var(--gold-dark);font-weight:600" id="chk-delivery-cost-label">Frete: R$ 0,00 (R$ 2,50/km a partir da loja)</p>
+      </div>
+      <div style="display:flex;gap:1rem;margin-top:1rem">
+        <button class="btn btn-outline" style="flex:1" onclick="goToStep(1)">Voltar</button>
+        <button class="btn btn-black" style="flex:2" onclick="goToStep(3)">Continuar</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: PAGAMENTO -->
+    <div id="chk-step-3" style="display:none">
+      <h3 class="chk-step-title"><span>3</span> Pagamento</h3>
+      <div class="radio-group" style="margin-bottom:1.5rem">
+        <label class="radio-card active" onclick="setPayment('pix', this)">
+          <i data-lucide="qr-code" size="20"></i>
+          <strong style="font-size:.9rem">PIX</strong>
+        </label>
+        <label class="radio-card" onclick="setPayment('cartao', this)">
+          <i data-lucide="credit-card" size="20"></i>
+          <strong style="font-size:.9rem">Cartão</strong>
+        </label>
+      </div>
+      <div style="background:var(--bg);padding:1.5rem;border-radius:6px;margin-bottom:1.5rem;text-align:center">
+        <span style="font-size:.9rem;color:var(--text-light)">Total a pagar</span>
+        <h2 style="font-family:var(--fd);font-size:2rem;color:var(--gold-dark)" id="chk-total-display">R$ 0,00</h2>
+      </div>
+      <div style="display:flex;gap:1rem">
+        <button class="btn btn-outline" style="flex:1" onclick="goToStep(2)">Voltar</button>
+        <button class="btn btn-gold" style="flex:2" onclick="finishCheckout()"><i data-lucide="check"></i> Finalizar Pedido</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CART DRAWER -->
+<div id="cart-drawer" style="position:fixed;right:-450px;top:0;width:400px;height:100%;background:var(--white);z-index:1000;box-shadow:-10px 0 30px rgba(0,0,0,0.1);transition:var(--tr);padding:2.5rem;display:flex;flex-direction:column">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+    <h2 style="font-family:var(--fd);font-size:1.5rem">Carrinho</h2>
+    <button onclick="toggleCart()" style="background:none;border:none;cursor:pointer;color:var(--text)"><i data-lucide="x"></i></button>
+  </div>
+  <div id="cart-items" style="flex:1;overflow-y:auto;margin-bottom:2rem"></div>
+  <div style="padding-top:2rem;border-top:1px solid var(--border)">
+    <div style="display:flex;justify-content:space-between;font-weight:600;font-size:1.3rem;margin-bottom:1.5rem;color:var(--black)">
+      <span>Total</span><span id="cart-total">R$ 0,00</span>
+    </div>
+    <button class="btn btn-black" style="width:100%;margin-bottom:.8rem" onclick="openCheckout()">Ir para Pagamento</button>
+  </div>
+</div>
+
+<!-- SECRET ADMIN MODAL -->
+<div id="auth-modal" class="modal-overlay" onclick="if(event.target === this) closeModal('auth-modal')">
+  <div class="modal-card" style="max-width:350px;padding:3rem 2rem;text-align:center;position:relative">
+    <button type="button" class="modal-close" onclick="closeModal('auth-modal')"><i data-lucide="x"></i></button>
+    <div style="color:var(--gold);margin-bottom:1rem;display:flex;justify-content:center"><i data-lucide="shield" size="40"></i></div>
+    <h3 style="font-family:var(--fd);font-size:1.5rem;margin-bottom:.5rem">Acesso Restrito</h3>
+    <p style="color:var(--text-light);font-size:.85rem;margin-bottom:1.5rem">Painel de controle Magister</p>
+    
+    <form onsubmit="event.preventDefault(); verifyAdmin();">
+      <div style="text-align:left;margin-bottom:1rem">
+        <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);display:block;margin-bottom:0.4rem">Login</label>
+        <input type="text" id="admin-user" placeholder="Login" style="width:100%;padding:.8rem;border:1px solid var(--border);border-radius:6px;text-align:center">
+      </div>
+      
+      <div style="text-align:left;margin-bottom:1.5rem">
+        <label style="font-size:0.8rem;font-weight:600;color:var(--text-light);display:block;margin-bottom:0.4rem">Senha</label>
+        <input type="password" id="admin-pass" placeholder="••••••••" style="width:100%;padding:.8rem;border:1px solid var(--border);border-radius:6px;text-align:center;letter-spacing:3px">
+      </div>
+
+      <button type="submit" class="btn btn-black" style="width:100%">Entrar no Painel</button>
+      <button type="button" class="btn btn-outline" style="width:100%;margin-top:.8rem" onclick="closeModal('auth-modal')">Cancelar</button>
+    </form>
+  </div>
+</div>
+
+<script>
+const API = '/api';
+let cart = [];
+let checkoutData = { delivery: 'retirada', payment: 'pix' };
+const WA_NUMBER = '5541991073383';
+
+lucide.createIcons();
+
+function notify(txt) {
+  const el = document.getElementById('notif');
+  el.innerText = txt; el.style.display = 'block';
+  setTimeout(()=> el.style.display='none', 3000);
+}
+
+// ── SECRET ADMIN TRIGGER ──
+let clicks = 0; let clickTimer;
+document.getElementById('logo-trigger').addEventListener('click', (e) => {
+  e.preventDefault(); clicks++; clearTimeout(clickTimer);
+  if(clicks >= 5) { document.getElementById('auth-modal').classList.add('active'); clicks = 0; }
+  else { clickTimer = setTimeout(()=> clicks = 0, 1000); }
+});
+
+function verifyAdmin() {
+  const user = document.getElementById('admin-user').value.trim();
+  const pass = document.getElementById('admin-pass').value.trim();
+  
+  if(user === 'Floratta' && pass === 'floratta2026') {
+    window.location.href = '/admin-panel.html';
+  } else {
+    alert('Login ou senha incorretos.');
+  }
+}
+
+function openModal(id) { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+function toggleCart() { const c = document.getElementById('cart-drawer'); c.style.right = c.style.right === '0px' ? '-450px' : '0px'; }
+
+// ── PRODUCTS ──
+let activeCategory = 'all';
+let allProducts = [];
+
+async function loadProducts() {
+  const res = await fetch(`${API}/products`);
+  allProducts = await res.json();
+  window.productsData = allProducts;
+
+  // ── MOSAICO DO HERO FOI SUBSTITUIDO POR LOGO GRANDE ──
+  // Não precisamos mais preencher o mosaico aqui.
+
+  // Categorias dinamicas
+  const pills = document.getElementById('cat-pills');
+  const catRes = await fetch(`${API}/categories`);
+  const catList = await catRes.json();
+  catList.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'cat-pill';
+    b.textContent = c.icon ? `${c.icon} ${c.name}` : c.name;
+    b.onclick = () => filterCat(c.id, b);
+    pills.appendChild(b);
+  });
+
+  renderGrid();
+}
+
+
+function filterCat(id, el) {
+  activeCategory = id;
+  document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderGrid();
+}
+
+function renderGrid() {
+  let filtered = activeCategory === 'all' ? [...allProducts] : allProducts.filter(p => p.category_id == activeCategory);
+  const sort = document.getElementById('sort-select').value;
+  if(sort === 'asc') filtered.sort((a,b) => a.price - b.price);
+  else if(sort === 'desc') filtered.sort((a,b) => b.price - a.price);
+  else if(sort === 'name') filtered.sort((a,b) => a.name.localeCompare(b.name));
+
+  document.getElementById('results-count').textContent = `${filtered.length} produto${filtered.length !== 1 ? 's' : ''}`;
+
+  document.getElementById('product-grid').innerHTML = filtered.map(p => `
+    <div class="pc">
+      <div class="pc-img-wrap" onclick="showProductDetails(${p.id})" style="cursor:pointer;position:relative">
+        ${p.image ? `<img src="${p.image}">` : ''}
+        ${p.is_new ? '<span class="pc-badge badge-new">Novo</span>' : ''}
+        ${p.stock > 0 && p.stock <= 10 ? `<span class="pc-badge badge-low" style="top:auto;bottom:.8rem">Ultimas ${p.stock}</span>` : ''}
+      </div>
+      <div class="pc-info">
+        <h3 class="pc-name" onclick="showProductDetails(${p.id})" style="cursor:pointer">${p.name}</h3>
+        <span class="pc-price">R$ ${p.price.toFixed(2)}</span>
+        <span class="pc-stock-info">${p.stock > 0 ? `${p.stock} disponíveis` : '<span style="color:var(--red)">Indisponível</span>'}</span>
+        <div class="pc-qty">
+          <button onclick="changeQty(${p.id}, -1)"><i data-lucide="minus" size="14"></i></button>
+          <span id="qty-${p.id}">1</span>
+          <button onclick="changeQty(${p.id}, 1)"><i data-lucide="plus" size="14"></i></button>
+        </div>
+        <div class="pc-btns">
+          <button class="btn btn-black" onclick="addToCartQty(${p.id}, '${p.name.replace(/'/g, '')}', ${p.price})">
+            <i data-lucide="shopping-bag" size="15"></i> Adicionar ao Carrinho
+          </button>
+          <a href="https://wa.me/${WA_NUMBER}?text=Ol%C3%A1!%20Quero%20encomendar%20*${encodeURIComponent(p.name)}*%20%E2%80%94%20R%24%20${p.price.toFixed(2)}." target="_blank" class="btn btn-wa">
+            <i data-lucide="message-circle" size="15"></i> Comprar pelo WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  lucide.createIcons();
+}
+
+function changeQty(id, delta) {
+  const el = document.getElementById(`qty-${id}`);
+  const cur = parseInt(el.textContent);
+  const next = Math.max(1, cur + delta);
+  el.textContent = next;
+}
+
+function addToCartQty(id, name, price) {
+  const qty = parseInt(document.getElementById(`qty-${id}`).textContent);
+  const ex = cart.find(i => i.id === id);
+  if(ex) ex.quantity += qty; else cart.push({id, name, price, quantity: qty});
+  updateCart(); notify(`${qty}x adicionado ao carrinho`);
+}
+
+
+function showProductDetails(id) {
+  const p = window.productsData.find(x => x.id === id);
+  if(!p) return;
+  document.getElementById('pd-content').innerHTML = `
+    <div class="pd-img">${p.image ? `<img src="${p.image}">` : ''}</div>
+    <div class="pd-info">
+      <div class="pd-cat">Catálogo Oficial</div>
+      <h2 class="pd-name">${p.name}</h2>
+      <div class="pd-price">R$ ${p.price.toFixed(2)}</div>
+      <p class="pd-desc">${p.description || 'Flores frescas selecionadas com o mais alto padrão de qualidade Nova Floratta. Perfeito para presentear e emocionar.'}</p>
+      <div style="display:flex;gap:0.5rem;flex-direction:column;margin-top:1rem">
+        <button class="btn btn-gold" style="width:100%" onclick="buyNow(${p.id}, '${p.name.replace(/'/g, '')}', ${p.price})">
+          <i data-lucide="zap" size="18"></i> Comprar Agora
+        </button>
+        <div style="display:flex;gap:0.5rem">
+          <button class="btn btn-black" style="flex:1" onclick="addToCart(${p.id}, '${p.name.replace(/'/g, '')}', ${p.price}); closeModal('product-modal')">
+            <i data-lucide="shopping-cart" size="18"></i> Adicionar
+          </button>
+          <a href="https://wa.me/${WA_NUMBER}?text=Olá! Quero encomendar o produto *${encodeURIComponent(p.name)}* (R$ ${p.price.toFixed(2)})." target="_blank" class="btn btn-wa" style="flex:1">
+            <i data-lucide="message-circle" size="18"></i> WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
+  lucide.createIcons();
+  openModal('product-modal');
+}
+
+function buyNow(id, name, price) {
+  addToCart(id, name, price);
+  closeModal('product-modal');
+  openCheckout();
+}
+
+// ── CART ──
+function addToCart(id, name, price) {
+  const ex = cart.find(i => i.id === id);
+  if(ex) ex.quantity++; else cart.push({id, name, price, quantity: 1});
+  updateCart(); notify("Produto adicionado ao carrinho");
+}
+// ── CHECKOUT FLOW ──
+let deliveryCost = 0;
+
+function calculateDelivery() {
+  const select = document.getElementById('chk-region');
+  const opt = select.options[select.selectedIndex];
+  if(opt && opt.value) {
+    deliveryCost = parseFloat(opt.getAttribute('data-cost'));
+    document.getElementById('chk-delivery-cost-label').innerText = `Frete: R$ ${deliveryCost.toFixed(2)} (R$ 2,50/km a partir da loja)`;
+  } else {
+    deliveryCost = 0;
+    document.getElementById('chk-delivery-cost-label').innerText = `Frete: R$ 0,00`;
+  }
+  updateCart();
+}
+
+function updateCart() {
+  const list = document.getElementById('cart-items');
+  let total = 0, count = 0;
+  list.innerHTML = cart.map(i => {
+    total += i.price * i.quantity; count += i.quantity;
+    return `<div style="display:flex;justify-content:space-between;margin-bottom:1.2rem;align-items:center">
+      <div><strong style="color:var(--black);font-size:.9rem">${i.name}</strong><br><small style="color:var(--text-light)">${i.quantity}x R$ ${i.price.toFixed(2)}</small></div>
+      <strong style="color:var(--gold-dark)">R$ ${(i.price * i.quantity).toFixed(2)}</strong>
+    </div>`;
+  }).join('');
+  document.getElementById('cart-total').innerText = `R$ ${total.toFixed(2)}`;
+  document.getElementById('cart-count').innerText = count;
+  
+  let cartTotal = total;
+  if(checkoutData.delivery === 'entrega') {
+    cartTotal += deliveryCost;
+  }
+  document.getElementById('chk-total-display').innerText = `R$ ${cartTotal.toFixed(2)}`;
+}
+
+function openCheckout() {
+  if(cart.length === 0) return notify("Carrinho vazio!");
+  toggleCart(); goToStep(1); openModal('checkout-modal');
+}
+
+function goToStep(n) {
+  if(n === 2) {
+    const name = document.getElementById('chk-name').value;
+    const phone = document.getElementById('chk-phone').value;
+    if(!name || !phone) return alert("Preencha nome e telefone.");
+  }
+  if(n === 3) {
+    if(checkoutData.delivery === 'entrega' && !document.getElementById('chk-address').value) return alert("Preencha o endereço.");
+  }
+  document.querySelectorAll('[id^="chk-step-"]').forEach(el => el.style.display = 'none');
+  document.getElementById(`chk-step-${n}`).style.display = 'block';
+}
+
+function setDelivery(type, el) {
+  checkoutData.delivery = type;
+  document.querySelectorAll('#chk-step-2 .radio-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('address-field').style.display = type === 'entrega' ? 'block' : 'none';
+  updateCart();
+}
+
+function setPayment(type, el) {
+  checkoutData.payment = type;
+  document.querySelectorAll('#chk-step-3 .radio-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+async function finishCheckout() {
+  const obs = document.getElementById('chk-obs').value;
+  const region = checkoutData.delivery === 'entrega' ? document.getElementById('chk-region').value : '';
+  const payload = {
+    customer: { name: document.getElementById('chk-name').value, phone: document.getElementById('chk-phone').value },
+    items: cart,
+    total: cart.reduce((a, b) => a + (b.price * b.quantity), 0),
+    delivery_type: checkoutData.delivery,
+    address: checkoutData.delivery === 'entrega' ? `${region} - ${document.getElementById('chk-address').value}` : '',
+    delivery_cost: checkoutData.delivery === 'entrega' ? deliveryCost : 0,
+    observation: obs,
+    payment_method: checkoutData.payment
+  };
+
+  const res = await fetch(`${API}/checkout`, {
+    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload)
+  });
+  
+  if(res.ok) {
+    notify("✅ Pedido realizado com sucesso!");
+    const cartTotalWithDelivery = payload.total + payload.delivery_cost;
+    
+    // Opcional: Redirecionar pro whats com resumo
+    const itemsText = payload.items.map(i => `${i.quantity}x ${i.name}`).join(', ');
+    let msg = `*Novo Pedido Nova Floratta!*\n\n`;
+    msg += `*Cliente:* ${payload.customer.name}\n`;
+    if(payload.observation) msg += `*Observação:* ${payload.observation}\n`;
+    msg += `*Itens:* ${itemsText}\n`;
+    msg += `*Entrega:* ${payload.delivery_type === 'entrega' ? `Sim (${payload.address}) - R$ ${payload.delivery_cost.toFixed(2)}` : 'Retirada na Loja'}\n`;
+    msg += `*Total a pagar:* R$ ${cartTotalWithDelivery.toFixed(2)}\n`;
+    msg += `*Pagamento:* ${payload.payment_method}`;
+
+    cart = []; updateCart(); closeModal('checkout-modal');
+    setTimeout(() => window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank'), 1000);
+  }
+}
+
+loadProducts().then(() => {
+  lucide.createIcons();
+});
+
+// ── INSTAGRAM: usa fotos do catálogo ──
+async function loadInstaGrid() {
+  const res = await fetch(`${API}/products`);
+  const products = await res.json();
+  const withImages = products.filter(p => p.image);
+  // Pega até 6, repetindo se necessário para preencher sempre 6 slots
+  const slots = Array.from({length: 6}, (_, i) => withImages[i % withImages.length]);
+  const grid = document.getElementById('insta-grid');
+  if(!grid || slots.every(s => !s)) return;
+  grid.innerHTML = slots.filter(Boolean).map(p => `
+    <div class="insta-item">
+      <img src="${p.image}" alt="${p.name}" loading="lazy">
+      <div class="insta-overlay">
+        <i data-lucide="instagram" size="28"></i>
+        <span style="font-size:.75rem; font-weight:600; letter-spacing:.05em">${p.name}</span>
+      </div>
+    </div>
+  `).join('');
+  lucide.createIcons();
+}
+loadInstaGrid();
+
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const cur = window.scrollY;
+  const hdr = document.querySelector('.hdr');
+  if (cur <= 10) { hdr.classList.remove('hide'); }
+  else if (cur > lastScroll + 5) { hdr.classList.add('hide'); }
+  else if (cur < lastScroll - 5) { hdr.classList.remove('hide'); }
+  lastScroll = cur;
+}, {passive: true});
+
+</script>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="https://i.imgur.com/Axaizmw.png" alt="Nova Floratta">
+        <p>Boutique especializada em flores frescas e arranjos exclusivos. Entregamos emocoes em todo o Brasil com carinho e pontualidade.</p>
+        <div class="footer-socials">
+          <a href="https://instagram.com/novafloratta" target="_blank"><i data-lucide="instagram" size="16"></i></a>
+          <a href="https://wa.me/5541991073383" target="_blank"><i data-lucide="message-circle" size="16"></i></a>
+          <a href="#"><i data-lucide="facebook" size="16"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Catalogo</h4>
+        <ul>
+          <li><a href="#catalog">Rosas</a></li>
+          <li><a href="#catalog">Buques</a></li>
+          <li><a href="#catalog">Arranjos</a></li>
+          <li><a href="#catalog">Girassois</a></li>
+          <li><a href="#catalog">Cestas</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Informacoes</h4>
+        <ul>
+          <li><a href="#">Politica de Entrega</a></li>
+          <li><a href="#">Trocas e Devolucoes</a></li>
+          <li><a href="#">Rastrear Pedido</a></li>
+          <li><a href="#">Perguntas Frequentes</a></li>
+          <li><a href="#">Privacidade</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contato</h4>
+        <div class="ci"><i data-lucide="map-pin" size="16"></i><span>Curitiba, PR. Entregas em todo o Brasil</span></div>
+        <div class="ci"><i data-lucide="phone" size="16"></i><span>(41) 9 9107-3383</span></div>
+        <div class="ci"><i data-lucide="mail" size="16"></i><span>contato@novafloratta.com.br</span></div>
+        <div class="ci"><i data-lucide="clock" size="16"></i><span>Seg - Sab, 8h - 20h</span></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 <span style="color:var(--gold)">Nova Floratta</span>. Todos os direitos reservados. Desenvolvido por <a href="https://magistersolution.com" target="_blank" style="color:var(--gold);text-decoration:none">Magister Tech</a>.</p>
+      <div class="footer-pay">
+        <span class="pay-tag">Visa</span><span class="pay-tag">Mastercard</span><span class="pay-tag">PIX</span><span class="pay-tag">Boleto</span><span class="pay-tag">Amex</span>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
