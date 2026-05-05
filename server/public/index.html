@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18142101011"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-18142101011');
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nova Floratta — Flores que contam histórias</title>
@@ -52,7 +61,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--fu);line-height:1.
 .insta-item:hover .insta-overlay{opacity:1}
 .insta-handle{text-align:center;margin-top:2rem;font-size:1rem;color:rgba(255,255,255,.5);letter-spacing:.05em}
 .insta-handle a{color:var(--gold);text-decoration:none;font-weight:600}
-@media(max-width:768px){.insta-grid{grid-template-columns:repeat(3,1fr)}.hdr-nav{display:none}.logo img{height:100px}}
+@media(max-width:768px){
+  .insta-grid{grid-template-columns:repeat(3,1fr)}
+  .hdr-nav{display:none}
+  .logo img{height:72px}
+  .hdr-inner{padding:.8rem 0}
+  .hdr-right{gap:.4rem}
+  .hdr-icon-btn{padding:.5rem .7rem;gap:.3rem;border-radius:6px}
+  .hdr-icon-btn .label{display:none}
+  .hdr-icon-btn-admin{display:flex !important;}
+  .badge{top:-5px;right:-5px;width:16px;height:16px;font-size:9px}
+  #view-shop{padding-top:140px !important}
+}
 
 /* ── HERO SPLIT ── */
 .hero{display:grid;grid-template-columns:1fr 1fr;min-height:580px;border-radius:var(--rl);overflow:hidden;margin:1.5rem 0 4rem;box-shadow:0 20px 60px rgba(0,0,0,.12)}
@@ -205,7 +225,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--fu);line-height:1.
           <a href="https://wa.me/5541991073383" target="_blank">Contato</a>
         </nav>
         <div class="hdr-right">
-          <button class="hdr-icon-btn" onclick="document.getElementById('auth-modal').classList.add('active')" title="Painel Admin">
+          <button class="hdr-icon-btn hdr-icon-btn-admin" onclick="document.getElementById('auth-modal').classList.add('active')" title="Painel Admin" style="background:rgba(201,169,110,.12);border-color:var(--gold)">
             <i data-lucide="shield" size="18"></i>
             <span class="label">Admin</span>
           </button>
@@ -213,10 +233,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--fu);line-height:1.
             <i data-lucide="message-circle" size="18"></i>
             <span class="label">WhatsApp</span>
           </a>
-          <button class="hdr-icon-btn" onclick="toggleCart()">
+          <button class="hdr-icon-btn" onclick="toggleCart()" style="position:relative">
             <i data-lucide="shopping-bag" size="18"></i>
             <span class="label">Carrinho</span>
-            <span id="cart-count" class="badge">0</span>
+            <span id="cart-count" class="badge" style="display:flex">0</span>
           </button>
         </div>
       </div>
@@ -323,8 +343,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--fu);line-height:1.
         <input type="text" id="chk-phone" placeholder="(  ) 99999-9999">
       </div>
       <div class="form-group">
-        <label>Observação (Opcional - Ex: Nome para cartão)</label>
-        <textarea id="chk-obs" rows="2" style="width:100%;padding:1rem;border:1px solid var(--border);border-radius:6px;font-family:var(--fu);font-size:.95rem;background:var(--bg)"></textarea>
+        <label>Dedicatória (Opcional — Ex: Para minha amada Maria 💐)</label>
+        <textarea id="chk-obs" rows="3" placeholder="Escreva aqui a mensagem da dedicatória..." style="width:100%;padding:1rem;border:1px solid var(--border);border-radius:6px;font-family:var(--fu);font-size:.95rem;background:var(--bg);resize:vertical"></textarea>
       </div>
       <button class="btn btn-black" style="width:100%;margin-top:1rem" onclick="goToStep(2)">Continuar</button>
     </div>
@@ -343,19 +363,25 @@ body{background:var(--bg);color:var(--text);font-family:var(--fu);line-height:1.
         </label>
       </div>
       <div class="form-group" id="address-field" style="display:none">
-        <label>Região de Entrega</label>
-        <select id="chk-region" onchange="calculateDelivery()" style="margin-bottom:1rem">
-          <option value="">Selecione uma região...</option>
-          <option value="Curitiba" data-cost="25.00">Curitiba (~10km)</option>
-          <option value="Piraquara" data-cost="45.00">Piraquara (~18km)</option>
-          <option value="Pinhais" data-cost="15.00">Pinhais (~6km)</option>
-          <option value="Colombo" data-cost="30.00">Colombo (~12km)</option>
-          <option value="Quatro Barras" data-cost="40.00">Quatro Barras (~16km)</option>
-          <option value="São José dos Pinhais" data-cost="55.00">São José dos Pinhais (~22km)</option>
-        </select>
+        <label>CEP</label>
+        <div style="display:flex;gap:.5rem;margin-bottom:.8rem">
+          <input type="text" id="chk-cep" placeholder="00000-000" maxlength="9" oninput="formatCEP(this)" style="flex:1">
+          <button type="button" class="btn btn-black" style="padding:.7rem 1rem;font-size:.8rem" onclick="buscarCEP()"><i data-lucide="search" size="14"></i> Buscar</button>
+        </div>
+        <div id="cep-result" style="display:none;background:var(--gold-light);border:1px solid var(--gold);border-radius:6px;padding:.8rem 1rem;margin-bottom:.8rem;font-size:.85rem">
+          <strong id="cep-logradouro"></strong><br><span id="cep-bairro-cidade" style="color:var(--text-light)"></span>
+        </div>
+        <label>Número e Complemento</label>
+        <input type="text" id="chk-numero" placeholder="Ex: 123, Apto 4" style="margin-bottom:.6rem">
         <label>Endereço Completo</label>
-        <input type="text" id="chk-address" placeholder="Rua, Número, Bairro...">
-        <p style="margin-top:0.5rem;font-size:0.85rem;color:var(--gold-dark);font-weight:600" id="chk-delivery-cost-label">Frete: R$ 0,00 (R$ 2,50/km a partir da loja)</p>
+        <input type="text" id="chk-address" placeholder="Preenchido automaticamente pelo CEP..." readonly style="background:#f5f5f5;color:var(--text-light)">
+        <div id="chk-delivery-cost-box" style="margin-top:.8rem;padding:.8rem 1rem;background:var(--bg);border-radius:6px;border:1px solid var(--border)">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:.85rem;color:var(--text-light)">Frete calculado:</span>
+            <strong id="chk-delivery-cost-label" style="color:var(--gold-dark);font-size:1rem">— informe o CEP</strong>
+          </div>
+          <p id="chk-delivery-region" style="font-size:.75rem;color:var(--text-light);margin-top:.3rem"></p>
+        </div>
       </div>
       <div style="display:flex;gap:1rem;margin-top:1rem">
         <button class="btn btn-outline" style="flex:1" onclick="goToStep(1)">Voltar</button>
@@ -366,23 +392,79 @@ body{background:var(--bg);color:var(--text);font-family:var(--fu);line-height:1.
     <!-- STEP 3: PAGAMENTO -->
     <div id="chk-step-3" style="display:none">
       <h3 class="chk-step-title"><span>3</span> Pagamento</h3>
-      <div class="radio-group" style="margin-bottom:1.5rem">
-        <label class="radio-card active" onclick="setPayment('pix', this)">
+      <div class="radio-group" style="margin-bottom:1rem">
+        <label class="radio-card active" onclick="setPayment('pix', this)" id="pay-pix-card">
           <i data-lucide="qr-code" size="20"></i>
-          <strong style="font-size:.9rem">PIX</strong>
+          <div><strong style="font-size:.9rem;display:block">PIX</strong><small style="color:var(--text-light)">Aprovação imediata</small></div>
         </label>
-        <label class="radio-card" onclick="setPayment('cartao', this)">
+        <label class="radio-card" onclick="setPayment('cartao', this)" id="pay-card-card">
           <i data-lucide="credit-card" size="20"></i>
-          <strong style="font-size:.9rem">Cartão</strong>
+          <div><strong style="font-size:.9rem;display:block">Cartão</strong><small style="color:var(--text-light)">Crédito/Débito</small></div>
         </label>
       </div>
-      <div style="background:var(--bg);padding:1.5rem;border-radius:6px;margin-bottom:1.5rem;text-align:center">
-        <span style="font-size:.9rem;color:var(--text-light)">Total a pagar</span>
-        <h2 style="font-family:var(--fd);font-size:2rem;color:var(--gold-dark)" id="chk-total-display">R$ 0,00</h2>
+
+      <!-- TOTAL -->
+      <div style="background:var(--bg);padding:1.2rem;border-radius:6px;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.85rem;color:var(--text-light)">Total a pagar</span>
+        <strong style="font-family:var(--fd);font-size:1.6rem;color:var(--gold-dark)" id="chk-total-display">R$ 0,00</strong>
       </div>
-      <div style="display:flex;gap:1rem">
+
+      <!-- PIX AREA -->
+      <div id="pix-area" style="display:none;padding:1.2rem;background:var(--gold-light);border:1px solid var(--gold);border-radius:8px;margin-bottom:1rem">
+        <p style="font-size:.8rem;color:var(--text-light);margin-bottom:.6rem;text-align:center">Escaneie o QR Code ou copie o código PIX</p>
+        <div id="pix-qr-wrap" style="margin:0 auto .8rem;width:160px;height:160px;background:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border)">
+          <img id="pix-qr-img" src="" alt="QR PIX" style="width:150px;height:150px;display:none">
+          <span id="pix-qr-loading" style="font-size:.75rem;color:var(--text-light);text-align:center">Gerando PIX...</span>
+        </div>
+        <div style="display:flex;gap:.4rem;align-items:center;margin-bottom:.8rem">
+          <input id="pix-copy-code" readonly style="flex:1;min-width:0;padding:.5rem .7rem;border:1px solid var(--border);border-radius:4px;font-size:.72rem;background:#fff" value="">
+          <button class="btn btn-black" style="padding:.5rem .9rem;font-size:.78rem;white-space:nowrap" onclick="copyPixCode()"><i data-lucide="copy" size="13"></i> Copiar</button>
+        </div>
+        <!-- DISCRIMINATIVO DE TOTAL -->
+        <div style="background:rgba(255,255,255,.7);border-radius:6px;padding:.8rem 1rem;margin-bottom:.8rem">
+          <div style="display:flex;justify-content:space-between;font-size:.83rem;margin-bottom:.3rem">
+            <span style="color:var(--text-light)">Produtos:</span>
+            <span id="pix-total-produtos" style="font-weight:600">R$ 0,00</span>
+          </div>
+          <div id="pix-frete-row" style="display:flex;justify-content:space-between;font-size:.83rem;margin-bottom:.4rem">
+            <span style="color:var(--text-light)">Frete:</span>
+            <span id="pix-total-frete" style="font-weight:600">R$ 0,00</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:1rem;border-top:1px solid var(--border);padding-top:.4rem">
+            <strong>Total a pagar:</strong>
+            <strong id="pix-total-final" style="color:var(--gold-dark);font-size:1.1rem">R$ 0,00</strong>
+          </div>
+        </div>
+        <p id="pix-status-msg" style="font-size:.78rem;color:var(--gold-dark);font-weight:600;text-align:center;margin-bottom:.6rem"></p>
+        <!-- BOTAO CONFIRMAR PAGAMENTO -->
+        <button id="btn-ja-paguei" class="btn btn-black" style="width:100%;background:#25D366;border:none;color:#fff;font-size:.9rem" onclick="confirmarPIX()">
+          <i data-lucide="check-circle" size="16"></i> Já Paguei — Confirmar Pedido
+        </button>
+      </div>
+
+      <!-- CARTÃO AREA -->
+      <div id="card-area" style="display:none">
+        <div class="form-group"><label>Número do Cartão</label><input type="text" id="card-number" placeholder="0000 0000 0000 0000" maxlength="19" oninput="formatCard(this)"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+          <div class="form-group"><label>Validade</label><input type="text" id="card-expiry" placeholder="MM/AA" maxlength="5"></div>
+          <div class="form-group"><label>CVV</label><input type="text" id="card-cvv" placeholder="123" maxlength="4"></div>
+        </div>
+        <div class="form-group"><label>Nome no Cartão</label><input type="text" id="card-name" placeholder="NOME SOBRENOME"></div>
+        <div class="form-group"><label>CPF do Titular</label><input type="text" id="card-cpf" placeholder="000.000.000-00" maxlength="14"></div>
+        <div class="form-group"><label>Parcelas</label>
+          <select id="card-installments" style="width:100%;padding:.9rem;border:1px solid var(--border);border-radius:6px;font-family:var(--fu)">
+            <option value="1">1x sem juros</option>
+            <option value="2">2x sem juros</option>
+            <option value="3">3x sem juros</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:1rem;margin-top:1rem">
         <button class="btn btn-outline" style="flex:1" onclick="goToStep(2)">Voltar</button>
-        <button class="btn btn-gold" style="flex:2" onclick="finishCheckout()"><i data-lucide="check"></i> Finalizar Pedido</button>
+        <button class="btn btn-gold" style="flex:2" id="btn-finish-payment" onclick="finishCheckout()">
+          <i data-lucide="zap" size="16"></i> Gerar PIX e Finalizar
+        </button>
       </div>
     </div>
 
@@ -390,14 +472,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--fu);line-height:1.
 </div>
 
 <!-- CART DRAWER -->
-<div id="cart-drawer" style="position:fixed;right:-450px;top:0;width:400px;height:100%;background:var(--white);z-index:1000;box-shadow:-10px 0 30px rgba(0,0,0,0.1);transition:var(--tr);padding:2.5rem;display:flex;flex-direction:column">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
-    <h2 style="font-family:var(--fd);font-size:1.5rem">Carrinho</h2>
-    <button onclick="toggleCart()" style="background:none;border:none;cursor:pointer;color:var(--text)"><i data-lucide="x"></i></button>
+<div id="cart-drawer" style="position:fixed;right:-110%;top:0;width:min(400px,100%);height:100%;background:var(--white);z-index:2000;box-shadow:-10px 0 30px rgba(0,0,0,0.15);transition:right .35s cubic-bezier(.4,0,.2,1);padding:2rem 1.5rem;display:flex;flex-direction:column">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)">
+    <h2 style="font-family:var(--fd);font-size:1.4rem">Carrinho</h2>
+    <button onclick="toggleCart()" style="background:none;border:none;cursor:pointer;color:var(--text);padding:.4rem"><i data-lucide="x" size="22"></i></button>
   </div>
-  <div id="cart-items" style="flex:1;overflow-y:auto;margin-bottom:2rem"></div>
-  <div style="padding-top:2rem;border-top:1px solid var(--border)">
-    <div style="display:flex;justify-content:space-between;font-weight:600;font-size:1.3rem;margin-bottom:1.5rem;color:var(--black)">
+  <div id="cart-items" style="flex:1;overflow-y:auto;margin-bottom:1.5rem"></div>
+  <div style="padding-top:1.5rem;border-top:1px solid var(--border)">
+    <div style="display:flex;justify-content:space-between;font-weight:600;font-size:1.2rem;margin-bottom:1rem;color:var(--black)">
       <span>Total</span><span id="cart-total">R$ 0,00</span>
     </div>
     <button class="btn btn-black" style="width:100%;margin-bottom:.8rem" onclick="openCheckout()">Ir para Pagamento</button>
@@ -464,7 +546,11 @@ function verifyAdmin() {
 
 function openModal(id) { document.getElementById(id).classList.add('active'); }
 function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-function toggleCart() { const c = document.getElementById('cart-drawer'); c.style.right = c.style.right === '0px' ? '-450px' : '0px'; }
+function toggleCart() { 
+  const c = document.getElementById('cart-drawer'); 
+  const isOpen = c.style.right === '0px';
+  c.style.right = isOpen ? '-110%' : '0px';
+}
 
 // ── PRODUCTS ──
 let activeCategory = 'all';
@@ -599,17 +685,121 @@ function addToCart(id, name, price) {
 // ── CHECKOUT FLOW ──
 let deliveryCost = 0;
 
-function calculateDelivery() {
-  const select = document.getElementById('chk-region');
-  const opt = select.options[select.selectedIndex];
-  if(opt && opt.value) {
-    deliveryCost = parseFloat(opt.getAttribute('data-cost'));
-    document.getElementById('chk-delivery-cost-label').innerText = `Frete: R$ ${deliveryCost.toFixed(2)} (R$ 2,50/km a partir da loja)`;
-  } else {
-    deliveryCost = 0;
-    document.getElementById('chk-delivery-cost-label').innerText = `Frete: R$ 0,00`;
+// ── TABELA DE FRETE POR CIDADE (ViaCEP + distância estimada) ──
+const FRETE_TABELA = [
+  { cidades: ['curitiba'], custo: 18.00, label: 'Curitiba (~10km)' },
+  { cidades: ['pinhais'], custo: 10.80, label: 'Pinhais (~6km)' },
+  { cidades: ['colombo'], custo: 21.60, label: 'Colombo (~12km)' },
+  { cidades: ['quatro barras'], custo: 28.80, label: 'Quatro Barras (~16km)' },
+  { cidades: ['piraquara'], custo: 32.40, label: 'Piraquara (~18km)' },
+  { cidades: ['são josé dos pinhais','sao jose dos pinhais'], custo: 38.00, label: 'São José dos Pinhais (~22km)' },
+  { cidades: ['araucária','araucaria'], custo: 36.00, label: 'Araucária (~20km)' },
+  { cidades: ['almirante tamandaré','almirante tamandare'], custo: 25.20, label: 'Almirante Tamandaré (~14km)' },
+  { cidades: ['campo largo'], custo: 38.00, label: 'Campo Largo (~25km)' },
+  { cidades: ['fazenda rio grande'], custo: 38.00, label: 'Fazenda Rio Grande (~25km)' },
+];
+
+function formatCEP(el) {
+  let v = el.value.replace(/\D/g,'');
+  if(v.length > 5) v = v.slice(0,5) + '-' + v.slice(5,8);
+  el.value = v;
+  if(v.replace('-','').length === 8) buscarCEP();
+}
+
+async function buscarCEP() {
+  const raw = document.getElementById('chk-cep').value.replace(/\D/g,'');
+  if(raw.length !== 8) return alert('CEP inválido. Digite os 8 dígitos.');
+  document.getElementById('chk-delivery-cost-label').innerText = 'Consultando CEP...';
+  document.getElementById('cep-result').style.display = 'none';
+  try {
+    const r = await fetch(`https://viacep.com.br/ws/${raw}/json/`);
+    const d = await r.json();
+    if(d.erro) { document.getElementById('chk-delivery-cost-label').innerText = 'CEP não encontrado.'; return; }
+
+    const logradouro = d.logradouro || '';
+    const bairro = d.bairro || '';
+    const cidade = d.localidade || '';
+    const uf = d.uf || '';
+
+    document.getElementById('cep-logradouro').textContent = logradouro || 'Endereço encontrado';
+    document.getElementById('cep-bairro-cidade').textContent = `${bairro ? bairro + ', ' : ''}${cidade} - ${uf}`;
+    document.getElementById('cep-result').style.display = 'block';
+
+    // Monta endereço base (número será concatenado ao continuar)
+    window._cepBase = { logradouro, bairro, cidade, uf };
+
+    // Calcula frete
+    const cidNorm = cidade.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    const match = FRETE_TABELA.find(f => f.cidades.some(c => cidNorm.includes(c.normalize('NFD').replace(/[\u0300-\u036f]/g,''))));
+    if(match) {
+      deliveryCost = Math.min(match.custo, 38.00);
+      document.getElementById('chk-delivery-cost-label').innerText = `R$ ${deliveryCost.toFixed(2)}`;
+      document.getElementById('chk-delivery-region').textContent = `📍 ${match.label} · R$ 1,80/km`;
+    } else {
+      deliveryCost = 38.00;
+      document.getElementById('chk-delivery-cost-label').innerText = `R$ 38,00`;
+      document.getElementById('chk-delivery-region').textContent = `📍 ${cidade} · Região estimada (Máx)`;
+    }
+    atualizarEnderecoCompleto();
+    updateCart();
+  } catch(e) {
+    document.getElementById('chk-delivery-cost-label').innerText = 'Erro ao buscar CEP.';
   }
-  updateCart();
+}
+
+function atualizarEnderecoCompleto() {
+  const base = window._cepBase;
+  if(!base) return;
+  const numero = document.getElementById('chk-numero').value;
+  const endereco = [base.logradouro, numero, base.bairro, base.cidade + ' - ' + base.uf].filter(Boolean).join(', ');
+  document.getElementById('chk-address').value = endereco;
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const numEl = document.getElementById('chk-numero');
+  if(numEl) numEl.addEventListener('input', atualizarEnderecoCompleto);
+});
+
+// ── FORMATAÇÕES ──
+function formatCard(el) {
+  let v = el.value.replace(/\D/g,'').slice(0,16);
+  el.value = v.match(/.{1,4}/g)?.join(' ') || v;
+}
+
+// ── PIX CONFIG (chave estática) ──
+const PIX_CHAVE = '41991073383'; // Telefone como chave PIX
+const PIX_NOME  = 'NOVA FLORATTA';
+const PIX_CIDADE = 'CURITIBA';
+
+function gerarPixEMV(chave, nome, cidade, valor) {
+  function campo(id, v) { const l = v.length.toString().padStart(2,'0'); return id + l + v; }
+  const merchantAcct = campo('00','BR.GOV.BCB.PIX') + campo('01', chave);
+  const payload = campo('00','01') + campo('26', merchantAcct) + campo('52','0000') + campo('53','986') +
+    campo('54', valor.toFixed(2)) + campo('58','BR') + campo('59', nome.slice(0,25)) +
+    campo('60', cidade.slice(0,15)) + campo('62', campo('05','***'));
+  // CRC16
+  const str = payload + '6304';
+  let crc = 0xFFFF;
+  for(let i=0;i<str.length;i++) { crc ^= str.charCodeAt(i) << 8; for(let j=0;j<8;j++) crc = (crc&0x8000) ? (crc<<1)^0x1021 : crc<<1; }
+  return payload + '6304' + (crc & 0xFFFF).toString(16).toUpperCase().padStart(4,'0');
+}
+
+function copyPixCode() {
+  const code = document.getElementById('pix-copy-code').value;
+  navigator.clipboard.writeText(code).then(() => {
+    document.getElementById('pix-status-msg').textContent = '✅ Código copiado! Cole no seu app de pagamento.';
+  });
+}
+
+function setPayment(type, el) {
+  checkoutData.payment = type;
+  document.querySelectorAll('#chk-step-3 .radio-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('pix-area').style.display = 'none';
+  document.getElementById('card-area').style.display = 'none';
+  const btn = document.getElementById('btn-finish-payment');
+  if(type === 'pix') btn.innerHTML = '<i data-lucide="zap" size="16"></i> Gerar PIX e Finalizar';
+  else btn.innerHTML = '<i data-lucide="credit-card" size="16"></i> Pagar com Cartão';
+  lucide.createIcons();
 }
 
 function updateCart() {
@@ -641,10 +831,16 @@ function goToStep(n) {
   if(n === 2) {
     const name = document.getElementById('chk-name').value;
     const phone = document.getElementById('chk-phone').value;
-    if(!name || !phone) return alert("Preencha nome e telefone.");
+    if(!name || !phone) return alert('Preencha nome e telefone.');
   }
   if(n === 3) {
-    if(checkoutData.delivery === 'entrega' && !document.getElementById('chk-address').value) return alert("Preencha o endereço.");
+    if(checkoutData.delivery === 'entrega') {
+      if(!document.getElementById('chk-address').value) return alert('Busque o CEP e informe o número.');
+      if(deliveryCost === 0) return alert('Aguarde o cálculo do frete.');
+    }
+    // Reset PIX area ao entrar no step 3
+    document.getElementById('pix-area').style.display = 'none';
+    document.getElementById('card-area').style.display = 'none';
   }
   document.querySelectorAll('[id^="chk-step-"]').forEach(el => el.style.display = 'none');
   document.getElementById(`chk-step-${n}`).style.display = 'block';
@@ -655,50 +851,120 @@ function setDelivery(type, el) {
   document.querySelectorAll('#chk-step-2 .radio-card').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('address-field').style.display = type === 'entrega' ? 'block' : 'none';
+  if(type === 'retirada') { deliveryCost = 0; }
   updateCart();
 }
 
-function setPayment(type, el) {
-  checkoutData.payment = type;
-  document.querySelectorAll('#chk-step-3 .radio-card').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-}
+// Variáveis globais para guardar dados do pedido após geração do PIX
+let _pedidoMsg = '';
+let _pedidoPayload = null;
 
 async function finishCheckout() {
+  const btn = document.getElementById('btn-finish-payment');
+  btn.disabled = true;
+  btn.innerHTML = '<i data-lucide="loader" size="16"></i> Processando...';
+  lucide.createIcons();
+
   const obs = document.getElementById('chk-obs').value;
-  const region = checkoutData.delivery === 'entrega' ? document.getElementById('chk-region').value : '';
+  const itemsTotal = cart.reduce((a,b) => a + (b.price * b.quantity), 0);
+  const frete = checkoutData.delivery === 'entrega' ? deliveryCost : 0;
+  const totalFinal = itemsTotal + frete;
+
   const payload = {
     customer: { name: document.getElementById('chk-name').value, phone: document.getElementById('chk-phone').value },
-    items: cart,
-    total: cart.reduce((a, b) => a + (b.price * b.quantity), 0),
+    items: [...cart], // copia do carrinho
+    total: itemsTotal,
     delivery_type: checkoutData.delivery,
-    address: checkoutData.delivery === 'entrega' ? `${region} - ${document.getElementById('chk-address').value}` : '',
-    delivery_cost: checkoutData.delivery === 'entrega' ? deliveryCost : 0,
+    address: checkoutData.delivery === 'entrega' ? document.getElementById('chk-address').value : '',
+    delivery_cost: frete,
     observation: obs,
     payment_method: checkoutData.payment
   };
+  _pedidoPayload = payload;
 
+  // Salva pedido no backend
   const res = await fetch(`${API}/checkout`, {
     method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload)
   });
-  
-  if(res.ok) {
-    notify("✅ Pedido realizado com sucesso!");
-    const cartTotalWithDelivery = payload.total + payload.delivery_cost;
-    
-    // Opcional: Redirecionar pro whats com resumo
-    const itemsText = payload.items.map(i => `${i.quantity}x ${i.name}`).join(', ');
-    let msg = `*Novo Pedido Nova Floratta!*\n\n`;
-    msg += `*Cliente:* ${payload.customer.name}\n`;
-    if(payload.observation) msg += `*Observação:* ${payload.observation}\n`;
-    msg += `*Itens:* ${itemsText}\n`;
-    msg += `*Entrega:* ${payload.delivery_type === 'entrega' ? `Sim (${payload.address}) - R$ ${payload.delivery_cost.toFixed(2)}` : 'Retirada na Loja'}\n`;
-    msg += `*Total a pagar:* R$ ${cartTotalWithDelivery.toFixed(2)}\n`;
-    msg += `*Pagamento:* ${payload.payment_method}`;
 
-    cart = []; updateCart(); closeModal('checkout-modal');
-    setTimeout(() => window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank'), 1000);
+  btn.disabled = false;
+  lucide.createIcons();
+
+  if(!res.ok) { notify('Erro ao registrar pedido.'); return; }
+
+  if(checkoutData.payment === 'pix') {
+    // Gera código PIX EMV com total correto
+    const pixCode = gerarPixEMV(PIX_CHAVE, PIX_NOME, PIX_CIDADE, totalFinal);
+    document.getElementById('pix-copy-code').value = pixCode;
+    document.getElementById('pix-status-msg').textContent = '';
+
+    // Preenche discriminativo de total
+    document.getElementById('pix-total-produtos').textContent = `R$ ${itemsTotal.toFixed(2)}`;
+    document.getElementById('pix-total-frete').textContent = frete > 0 ? `R$ ${frete.toFixed(2)}` : 'Grátis';
+    document.getElementById('pix-total-final').textContent = `R$ ${totalFinal.toFixed(2)}`;
+    document.getElementById('pix-frete-row').style.display = frete > 0 ? 'flex' : 'none';
+
+    // Atualiza o "Total a pagar" do step 3 com valor correto
+    document.getElementById('chk-total-display').textContent = `R$ ${totalFinal.toFixed(2)}`;
+
+    // QR Code via API pública
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(pixCode)}&size=150x150&margin=5`;
+    const qrImg = document.getElementById('pix-qr-img');
+    qrImg.src = qrUrl;
+    qrImg.style.display = 'block';
+    document.getElementById('pix-qr-loading').style.display = 'none';
+    document.getElementById('pix-area').style.display = 'block';
+
+    // Prepara mensagem WA (será enviada só quando clicar Confirmar)
+    const itemsText = payload.items.map(i => `${i.quantity}x ${i.name}`).join(', ');
+    let msg = `*Novo Pedido Nova Floratta! 🌸*\n\n`;
+    msg += `*Cliente:* ${payload.customer.name}\n`;
+    msg += `*Tel:* ${payload.customer.phone}\n`;
+    if(obs) msg += `*Dedicatória:* ${obs}\n`;
+    msg += `*Itens:* ${itemsText}\n`;
+    msg += `*Entrega:* ${frete > 0 ? `Delivery — ${payload.address} (R$ ${frete.toFixed(2)})` : 'Retirada na Loja'}\n`;
+    msg += `*Produtos:* R$ ${itemsTotal.toFixed(2)}\n`;
+    msg += `*Frete:* ${frete > 0 ? `R$ ${frete.toFixed(2)}` : 'Grátis'}\n`;
+    msg += `*TOTAL:* R$ ${totalFinal.toFixed(2)}\n`;
+    msg += `*Pagamento:* PIX — aguardando confirmação`;
+    _pedidoMsg = msg;
+
+    btn.innerHTML = '<i data-lucide="check" size="16"></i> PIX Gerado!';
+    btn.style.background = '#888';
+    btn.disabled = true;
+    lucide.createIcons();
+    notify('✅ PIX gerado! Escaneie o QR ou copie o código. Clique em "Já Paguei" ao finalizar.');
+    // NÃO limpa carrinho aqui — só limpa quando confirmar
+
+  } else {
+    // Cartão: mostra formulário
+    document.getElementById('card-area').style.display = 'block';
+    btn.innerHTML = '<i data-lucide="lock" size="16"></i> Confirmar Pagamento';
+    btn.onclick = confirmarCartao;
+    lucide.createIcons();
   }
+}
+
+function confirmarPIX() {
+  if(!_pedidoMsg) return;
+  cart = []; updateCart();
+  closeModal('checkout-modal');
+  notify('✅ Pedido confirmado! Abrindo WhatsApp...');
+  setTimeout(() => window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(_pedidoMsg)}`, '_blank'), 800);
+  _pedidoMsg = ''; _pedidoPayload = null;
+}
+
+async function confirmarCartao() {
+  const nome = document.getElementById('card-name').value;
+  const num = document.getElementById('card-number').value;
+  if(!nome || !num) return alert('Preencha os dados do cartão.');
+  notify('Processando cartão...');
+  // Integração futura com Mercado Pago SDK
+  // Por ora redireciona pro WhatsApp para confirmar manualmente
+  const total = cart.reduce((a,b)=>a+(b.price*b.quantity),0) + (checkoutData.delivery==='entrega'?deliveryCost:0);
+  const msg = `*Pagamento Cartão — Nova Floratta 🌸*\nCliente: ${document.getElementById('chk-name').value}\nTotal: R$ ${total.toFixed(2)}\nAguardo confirmação do pagamento.`;
+  cart=[]; updateCart(); closeModal('checkout-modal');
+  setTimeout(()=>window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank'),1000);
 }
 
 loadProducts().then(() => {
