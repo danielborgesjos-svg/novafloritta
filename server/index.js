@@ -3,7 +3,7 @@ const cors = require('cors');
 const Database = require('better-sqlite3');
 const path = require('path');
 const multer = require('multer');
-
+const { sendEmailNotification, sendWhatsAppNotification } = require('./notify');
 const app = express();
 const db = new Database('database.db');
 
@@ -161,7 +161,14 @@ app.post('/api/checkout', (req, res) => {
     });
 
     try {
-        res.json({ orderId: transaction(), success: true });
+        const orderId = transaction();
+        
+        // DISPARA NOTIFICACOES SILENCIOSAS
+        const orderData = { id: orderId, ...req.body };
+        sendEmailNotification(orderData).catch(console.error);
+        sendWhatsAppNotification(orderData).catch(console.error);
+
+        res.json({ orderId: orderId, success: true });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

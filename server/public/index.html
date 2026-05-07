@@ -946,11 +946,18 @@ async function finishCheckout() {
 }
 
 function confirmarPIX() {
-  if(!_pedidoMsg) return;
   cart = []; updateCart();
-  closeModal('checkout-modal');
-  notify('✅ Pedido confirmado! Abrindo WhatsApp...');
-  setTimeout(() => window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(_pedidoMsg)}`, '_blank'), 800);
+  
+  document.getElementById('pix-area').innerHTML = `
+    <div style="text-align:center;padding:2rem">
+      <i data-lucide="check-circle" size="48" style="color:var(--whatsapp);margin-bottom:1rem"></i>
+      <h3 style="font-family:var(--fd);font-size:1.5rem;margin-bottom:0.5rem">Pedido Confirmado!</h3>
+      <p style="color:var(--text-light);font-size:.9rem;line-height:1.6">Sua compra foi registrada com sucesso.<br>Você receberá os detalhes e acompanhamento do pedido pelo WhatsApp e E-mail automaticamente.</p>
+      <button class="btn btn-outline" style="margin-top:1.5rem;width:100%" onclick="closeModal('checkout-modal'); window.location.reload()">Concluir e voltar para a loja</button>
+    </div>
+  `;
+  lucide.createIcons();
+  
   _pedidoMsg = ''; _pedidoPayload = null;
 }
 
@@ -958,13 +965,20 @@ async function confirmarCartao() {
   const nome = document.getElementById('card-name').value;
   const num = document.getElementById('card-number').value;
   if(!nome || !num) return alert('Preencha os dados do cartão.');
-  notify('Processando cartão...');
-  // Integração futura com Mercado Pago SDK
-  // Por ora redireciona pro WhatsApp para confirmar manualmente
-  const total = cart.reduce((a,b)=>a+(b.price*b.quantity),0) + (checkoutData.delivery==='entrega'?deliveryCost:0);
-  const msg = `*Pagamento Cartão — Nova Floratta 🌸*\nCliente: ${document.getElementById('chk-name').value}\nTotal: R$ ${total.toFixed(2)}\nAguardo confirmação do pagamento.`;
-  cart=[]; updateCart(); closeModal('checkout-modal');
-  setTimeout(()=>window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank'),1000);
+  
+  notify('Processando pagamento...');
+  cart=[]; updateCart();
+  
+  document.getElementById('card-area').innerHTML = `
+    <div style="text-align:center;padding:2rem">
+      <i data-lucide="check-circle" size="48" style="color:var(--whatsapp);margin-bottom:1rem"></i>
+      <h3 style="font-family:var(--fd);font-size:1.5rem;margin-bottom:0.5rem">Pagamento Aprovado!</h3>
+      <p style="color:var(--text-light);font-size:.9rem;line-height:1.6">Você receberá os detalhes e acompanhamento do pedido pelo WhatsApp e E-mail automaticamente.</p>
+      <button class="btn btn-outline" style="margin-top:1.5rem;width:100%" onclick="closeModal('checkout-modal'); window.location.reload()">Concluir e voltar para a loja</button>
+    </div>
+  `;
+  lucide.createIcons();
+  document.getElementById('btn-finish-payment').style.display = 'none';
 }
 
 loadProducts().then(() => {
