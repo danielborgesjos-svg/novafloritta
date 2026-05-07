@@ -1894,7 +1894,7 @@
         msg += `*Produtos:* R$ ${itemsTotal.toFixed(2)}\n`;
         msg += `*Frete:* ${frete > 0 ? `R$ ${frete.toFixed(2)}` : 'Grátis'}\n`;
         msg += `*TOTAL:* R$ ${totalFinal.toFixed(2)}\n`;
-        msg += `*Pagamento:* PIX — aguardando confirmação`;
+        msg += `*Pagamento:* PIX — aguardando comprovante`;
         _pedidoMsg = msg;
 
         btn.innerHTML = '<i data-lucide="check" size="16"></i> PIX Gerado!';
@@ -1902,10 +1902,22 @@
         btn.disabled = true;
         lucide.createIcons();
         notify('✅ PIX gerado! Escaneie o QR ou copie o código. Clique em "Já Paguei" ao finalizar.');
-        // NÃO limpa carrinho aqui — só limpa quando confirmar
 
       } else {
-        // Cartão: mostra formulário
+        // Cartão
+        const itemsText = payload.items.map(i => `${i.quantity}x ${i.name}`).join(', ');
+        let msg = `*Novo Pedido Nova Floratta! 🌸*\n\n`;
+        msg += `*Cliente:* ${payload.customer.name}\n`;
+        msg += `*Tel:* ${payload.customer.phone}\n`;
+        if (obs) msg += `*Dedicatória:* ${obs}\n`;
+        msg += `*Itens:* ${itemsText}\n`;
+        msg += `*Entrega:* ${frete > 0 ? `Delivery — ${payload.address} (R$ ${frete.toFixed(2)})` : 'Retirada na Loja'}\n`;
+        msg += `*Produtos:* R$ ${itemsTotal.toFixed(2)}\n`;
+        msg += `*Frete:* ${frete > 0 ? `R$ ${frete.toFixed(2)}` : 'Grátis'}\n`;
+        msg += `*TOTAL:* R$ ${totalFinal.toFixed(2)}\n`;
+        msg += `*Pagamento:* Cartão de Crédito — link manual a enviar`;
+        _pedidoMsg = msg;
+
         document.getElementById('card-area').style.display = 'block';
         btn.innerHTML = '<i data-lucide="lock" size="16"></i> Confirmar Pagamento';
         btn.onclick = confirmarCartao;
@@ -1928,10 +1940,8 @@
       if (!nome || !num) return alert('Preencha os dados do cartão.');
 
       notify('Processando pagamento...');
-      const total = cart.reduce((a,b)=>a+(b.price*b.quantity),0) + (checkoutData.delivery==='entrega'?deliveryCost:0);
-      const msg = `*Pagamento Cartão — Nova Floratta 🌸*\nCliente: ${document.getElementById('chk-name').value}\nTotal: R$ ${total.toFixed(2)}\nAguardo confirmação do pagamento.`;
       cart = []; updateCart(); closeModal('checkout-modal');
-      setTimeout(()=>window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,'_blank'),1000);
+      setTimeout(()=>window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(_pedidoMsg)}`,'_blank'),1000);
     }
 
     loadProducts().then(() => {
