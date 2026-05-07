@@ -2,7 +2,7 @@ const Database = require('better-sqlite3');
 const db = new Database('database.db');
 
 const products = [
-  { name: 'Rosa embalada com ferreiro', price: 35.99, desc: '', img: 'https://i.imgur.com/9liXyPC.png', cat: 1 },
+  { name: 'Rosa embalada com ferrero', price: 35.99, desc: '', img: 'https://i.imgur.com/9liXyPC.png', cat: 1 },
   { name: 'Rosa embalada', price: 20.00, desc: 'Rosa embalada celofane com laço.', img: 'https://i.imgur.com/te6WJcJ.png', cat: 1 },
   { name: 'Mini buque Mundo amarelo doce', price: 99.99, desc: '(3 girassol 3 ferrero rocher)', img: 'https://i.imgur.com/by2bFNy.png', cat: 4 },
   { name: 'Surpresa cacau show com balão', price: 59.99, desc: '(1 caixa de bombom cacau show ,1 balão coração pequeno)', img: 'https://i.imgur.com/Cm8xQ9I.png', cat: 3 },
@@ -20,7 +20,7 @@ const products = [
   { name: 'Buque mundo azul', price: 189.99, desc: '(12 rosas azuis)', img: 'https://i.imgur.com/gADtbnl.png', cat: 2 },
   { name: 'Buque mundo amarelo doce', price: 129.99, desc: '6 girassol e 6 ferrero', img: 'https://i.imgur.com/Z0qSu63.png', cat: 4 },
   { name: 'Buque emoções doce', price: 139.99, desc: '(6 rosas 🌹 e 6 ferrero rocher)', img: 'https://i.imgur.com/ru3EsDI.jpeg', cat: 2 },
-  { name: 'Buque muitas emoções', price: 209.99, desc: '(12 rosas e 12 ferreiro)', img: 'https://i.imgur.com/e3AteaP.jpeg', cat: 2 },
+  { name: 'Buque muitas emoções', price: 209.99, desc: '(12 rosas e 12 ferrero)', img: 'https://i.imgur.com/e3AteaP.jpeg', cat: 2 },
   { name: 'Buque emoções', price: 109.99, desc: '(6 rosas)', img: 'https://i.imgur.com/uKGuatT.png', cat: 2 },
   { name: 'Buque emoções com surpresa cacau show', price: 149.99, desc: '( 6 rosas , 1 caixa bombom cacau show)', img: 'https://i.imgur.com/msAzyNt.png', cat: 2 },
   { name: 'Buque meu mundo misto', price: 189.99, desc: '(6 girassol 6 rosas vermelhas)', img: 'https://i.imgur.com/9ChDn2t.png', cat: 2 },
