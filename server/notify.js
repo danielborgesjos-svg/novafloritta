@@ -37,12 +37,12 @@ async function sendEmailNotification(orderData) {
 }
 
 async function sendWhatsAppNotification(orderData) {
-    // Exemplo para Evolution API ou similar
-    const whatsApiUrl = process.env.WHATSAPP_API_URL; 
-    const whatsApiKey = process.env.WHATSAPP_API_KEY;
+    // API Não Oficial via CallMeBot (Gratuita para notificações simples)
+    const apiKey = process.env.CALLMEBOT_API_KEY;
+    const phone = process.env.ADMIN_PHONE || '5541991073383';
     
-    if (!whatsApiUrl) {
-        console.log("[NOTIFY] Pulo de envio de WhatsApp Automático (WHATSAPP_API_URL ausente no .env)");
+    if (!apiKey) {
+        console.log("[NOTIFY] Pulo de envio de WhatsApp: CALLMEBOT_API_KEY ausente no .env");
         return;
     }
     
@@ -61,25 +61,15 @@ async function sendWhatsAppNotification(orderData) {
         msg += `\n💵 *Frete:* ${frete}\n`;
         msg += `💰 *TOTAL A RECEBER:* R$ ${total}`;
 
-        // Corpo da requisição comum na Evolution API
-        const response = await fetch(whatsApiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': whatsApiKey || '',
-                'Authorization': `Bearer ${whatsApiKey || ''}`
-            },
-            body: JSON.stringify({
-                number: ADMIN_PHONE, // O numero do admin que deve apitar
-                options: { delay: 1200 },
-                textMessage: { text: msg }
-            })
-        });
+        // Chamada direta via GET na API do CallMeBot
+        const url = `https://api.callmebot.com/whatsapp.php?phone=+${phone}&text=${encodeURIComponent(msg)}&apikey=${apiKey}`;
+        
+        const response = await fetch(url);
         
         if (response.ok) {
-            console.log(`[NOTIFY] WhatsApp disparado silenciosamente para ${ADMIN_PHONE}.`);
+            console.log(`[NOTIFY] WhatsApp disparado com sucesso via CallMeBot para ${phone}.`);
         } else {
-            console.error("[NOTIFY] Erro na API do Whats:", await response.text());
+            console.error("[NOTIFY] Erro na API do CallMeBot:", await response.text());
         }
     } catch (e) {
         console.error("[NOTIFY] Falha na request WhatsApp:", e.message);
