@@ -1,3 +1,4 @@
+require('dotenv').config();
 const nodemailer = require('nodemailer');
 
 // O e-mail e telefone do dono da loja que receberá a notificação
