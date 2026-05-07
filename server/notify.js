@@ -25,7 +25,7 @@ async function sendEmailNotification(orderData) {
         
         await transporter.sendMail({
             from: `"Nova Floratta Automatizada" <${process.env.SMTP_USER}>`,
-            to: ADMIN_EMAIL, 
+            to: `${ADMIN_EMAIL}, Jujubakeko@gmail.com`, 
             subject: `Novo Pedido #${orderData.id} - Nova Floratta`,
             text: text
         });
